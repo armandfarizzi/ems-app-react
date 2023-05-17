@@ -1,8 +1,7 @@
 import { lazy, Suspense } from "react";
+import { Navigate } from "react-router-dom";
 
-import Home from "@/pages/home/Home";
-const Form = lazy(() => import("@/pages/form/Form"));
-
+const EmployeeManagement = lazy(() => import("@/pages/employee-management/EmployeeManagement"));
 
 /** @typedef {import('react-router-dom').RouteObject RouteObject} */
 /** @type {RouteObject[]} routesArray a collection of routes defined in the application */
@@ -10,13 +9,16 @@ export const routesArray = [
 	{
 		path: "/",
 		name: "Home",
-		element: <Home />,
+		element: <Navigate to="/employee-management" replace={true} />,
 		index: true
 	}, {
-		path: "/form",
-		name: "Employee Management System",
+		path: "/employee-management",
+		name: "Employee Management",
 		element: <Suspense fallback={<></>}>
-			<Form />
-		</Suspense>
+			<EmployeeManagement />
+		</Suspense>,
+		loader: async () => {
+			return fetch("http://localhost:8081/api/v1/employees");
+		}
 	},
 ];

@@ -16,6 +16,9 @@ dependencies:
   daisyui:
     specifier: ^2.51.6
     version: 2.51.6(autoprefixer@10.4.14)(postcss@8.4.23)
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   i18next:
     specifier: ^22.4.15
     version: 22.4.15
@@ -1030,6 +1033,13 @@ packages:
       tailwindcss: 3.3.2
     transitivePeerDependencies:
       - ts-node
+    dev: false
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.21.5
     dev: false
 
   /debug@4.3.4:

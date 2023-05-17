@@ -12,13 +12,17 @@ import {
 } from "@tanstack/react-table";
 import PropType from "prop-types";
 import { useState } from "react";
+import { useEffect } from "react";
 
-import { Table, TableBody,TableHeader } from "./Table";
+import { Table, TableBody, TableHeader } from "./Table";
 
 export function DataTable({
 	columns,
 	data,
 	className,
+	tabSelected,
+	tabColumnFilter,
+	tabs,
 	...props
 }) {
 	const [sorting, setSorting] = useState([]);
@@ -44,45 +48,28 @@ export function DataTable({
 			rowSelection,
 		},
 	});
+
+	useEffect(() => {
+		if(!tabColumnFilter) {
+			return;
+		}
+		table.getColumn(tabColumnFilter).setFilterValue(tabSelected);
+	}, [tabSelected, tabColumnFilter, table]);
+
 	return (
 		<div className="w-full">
-			<div className="flex items-center py-4">
+			<div className="flex items-start py-4 justify-between flex-wrap">
 				<input
 					placeholder="Filter emails..."
 					value={(table.getColumn("email").getFilterValue()) ?? ""}
 					onChange={(event) =>
 						table.getColumn("email").setFilterValue(event.target.value)
 					}
-					className="max-w-sm"
+					className="input input-sm max-w-sm mb-3 md:mb-0"
 				/>
-				{/* <DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="ml-auto">
-							Columns <ChevronDown className="ml-2 h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className="capitalize"
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}
-									>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								);
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu> */}
+				{tabs}
 			</div>
-			<div className="rounded-md border">
+			<div className="rounded-md">
 				<Table className={className} {...props}>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -136,14 +123,14 @@ export function DataTable({
 				</div>
 				<div className="space-x-2">
 					<button
-						className="btn btn-primary"
+						className="btn btn-primary btn-sm"
 						onClick={() => table.previousPage()}
 						disabled={!table.getCanPreviousPage()}
 					>
 						Previous
 					</button>
 					<button
-						className="btn btn-primary"
+						className="btn btn-primary btn-sm"
 						onClick={() => table.nextPage()}
 						disabled={!table.getCanNextPage()}
 					>
@@ -158,5 +145,8 @@ export function DataTable({
 DataTable.propTypes = {
 	columns: PropType.any,
 	data: PropType.any,
-	className: PropType.string
+	className: PropType.string,
+	tabs: PropType.element,
+	tabColumnFilter: PropType.string,
+	tabSelected: PropType.string,
 };
