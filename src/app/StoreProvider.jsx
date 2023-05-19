@@ -25,14 +25,11 @@ const StoreProvider = ({ children }) => {
 		</Provider>
 	);
 };
-
-
-
-
 RunFirstReduxEffect.propTypes = {
 	children: PropTypes.element
 };
 StoreProvider.propTypes = {
 	children: PropTypes.element
 };
+
 export default StoreProvider;

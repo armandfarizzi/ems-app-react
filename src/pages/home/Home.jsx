@@ -17,9 +17,6 @@ function Home() {
 				<div>
 					Store: value To Change {countState}
 				</div>
-				<div>
-
-				</div>
 				<a href="https://vitejs.dev" target="_blank" rel="noreferrer">
 					<img src={viteLogo} className="logo" alt="Vite logo" />
 				</a>
@@ -29,20 +26,20 @@ function Home() {
 			</div>
 			<h1>Vite + React</h1>
 			<div className="d-flex justify-content-center">
-				<button className='btn btn-secondary mx-2' onClick={() => dispatch(incrementValueToChange())}>
+				<button className='btn-secondary btn mx-2' onClick={() => dispatch(incrementValueToChange())}>
 					INCR: value to change is {valueToChangeState}
 				</button>
-				<button className='btn btn-light border mx-2' onClick={() => dispatch(resetValueToChange())}>
+				<button className='btn-light btn mx-2 border' onClick={() => dispatch(resetValueToChange())}>
 					reset value to change
 				</button>
 			</div>
 			<p>
 				Edit <code>src/App.jsx</code> and save to test HMR
 			</p>
-			<Link to={"/form"} className='btn btn-primary'>
+			<Link to={"/form"} className='btn-primary btn'>
 				Form demo 🚀
 			</Link>
-			<div className="mt-3 p-4 border">
+			<div className="mt-3 border p-4">
 				<Counter />
 				<p>
 					Counter Component

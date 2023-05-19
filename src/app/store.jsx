@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 
 import counterReducer from '@/features/counter/counterSlice';
 import departmentReducer from '@/features/department/departmentSlice';
+import modalReducer from '@/features/modal/modalSlice';
 
 const persistConfig = {
 	key: 'root',
@@ -23,6 +24,7 @@ export const store = configureStore({
 	reducer: {
 		counter: persistedCounter,
 		department: persistedDepartment,
+		modal: modalReducer
 	},
 	devTools: true,
 	middleware: [thunk]

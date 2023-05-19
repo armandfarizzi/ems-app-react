@@ -18,6 +18,7 @@ import { Table, TableBody, TableHeader } from "./Table";
 
 export function DataTable({
 	columns,
+	buttonGroup,
 	data,
 	className,
 	tabSelected,
@@ -58,15 +59,18 @@ export function DataTable({
 
 	return (
 		<div className="w-full">
-			<div className="flex items-start py-4 justify-between flex-wrap">
-				<input
-					placeholder="Filter emails..."
-					value={(table.getColumn("email").getFilterValue()) ?? ""}
-					onChange={(event) =>
-						table.getColumn("email").setFilterValue(event.target.value)
-					}
-					className="input input-sm max-w-sm mb-3 md:mb-0"
-				/>
+			<div className="flex flex-wrap items-start justify-between pb-4 pt-2">
+				<div>
+					<input
+						placeholder="Filter emails..."
+						value={(table.getColumn("email").getFilterValue()) ?? ""}
+						onChange={(event) =>
+							table.getColumn("email").setFilterValue(event.target.value)
+						}
+						className="input input-sm mb-3 max-w-sm md:mb-0"
+					/>
+					{buttonGroup}
+				</div>
 				{tabs}
 			</div>
 			<div className="rounded-md">
@@ -117,20 +121,20 @@ export function DataTable({
 				</Table>
 			</div>
 			<div className="flex items-center justify-end space-x-2 py-4">
-				<div className="flex-1 text-sm text-muted-foreground">
+				<div className="flex-1 text-sm">
 					{table.getFilteredSelectedRowModel().rows.length} of{" "}
 					{table.getFilteredRowModel().rows.length} row(s) selected.
 				</div>
 				<div className="space-x-2">
 					<button
-						className="btn btn-primary btn-sm"
+						className="btn-primary btn-sm btn"
 						onClick={() => table.previousPage()}
 						disabled={!table.getCanPreviousPage()}
 					>
 						Previous
 					</button>
 					<button
-						className="btn btn-primary btn-sm"
+						className="btn-primary btn-sm btn"
 						onClick={() => table.nextPage()}
 						disabled={!table.getCanNextPage()}
 					>
@@ -143,6 +147,7 @@ export function DataTable({
 }
 
 DataTable.propTypes = {
+	buttonGroup: PropType.element,
 	columns: PropType.any,
 	data: PropType.any,
 	className: PropType.string,

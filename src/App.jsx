@@ -5,9 +5,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { routesArray } from '@/routes/routes';
 
+import Modal from './components/Modal/Modal';
+
 function App() {
 	return (
-		<RouterProvider router={createBrowserRouter(routesArray)}/>
+		<>	<Modal/>
+			<RouterProvider router={createBrowserRouter(routesArray)}/>
+		</>
 	);
 }
 

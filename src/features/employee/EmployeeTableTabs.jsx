@@ -12,7 +12,7 @@ function EmployeeTableTabs() {
 		<div className="tabs">
 			<a
 				onClick={() => dispatch(unselectDepartmentById())}
-				className={clsx("tab tab-bordered", {"tab-active": filterDepartmentId === ""})}
+				className={clsx("tab-bordered tab", {"tab-active": filterDepartmentId === ""})}
 			>
 				All
 			</a>
@@ -23,7 +23,7 @@ function EmployeeTableTabs() {
 							return (
 								<a
 									onClick={() =>  dispatch(selectDepartmentById(dep.id))}
-									className={clsx("tab tab-bordered", {"tab-active": filterDepartmentId === dep.id})}
+									className={clsx("tab-bordered tab", {"tab-active": filterDepartmentId === dep.id})}
 									key={dep.id}>
 									{dep.department_name}
 								</a>
