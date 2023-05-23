@@ -1,18 +1,52 @@
+import { ArrowDown, ArrowUp,ArrowUpDown } from "lucide-react";
+import PropType from "prop-types";
 import { useSelector } from "react-redux";
 
 import { getDepartmentById } from "@/features/department/departmentSlice";
 
+function ArrowIcon({column}) {
+	return (
+		column.getIsSorted() === "desc" ?
+			<ArrowDown className="ml-2 h-4 w-4" /> :
+			column.getIsSorted() === "asc" ?
+				<ArrowUp className="ml-2 h-4 w-4"/> :
+				<ArrowUpDown className="ml-2 h-4 w-4"/>
+	);
+}
+ArrowIcon.propTypes = {
+	column: PropType.any,
+};
+
 export const columns = [
 	{
 		accessorKey: "name",
-		header: () => <div>Name</div>,
+		header: ({column}) =>
+			<div
+				className="flex"
+				onClick={() => {
+					console.log(column.getIsSorted());
+					return column.toggleSorting(column.getIsSorted() === "asc");
+				}}
+			>
+				<span>name</span>
+				<ArrowIcon column={column}/>
+			</div>,
 		cell: ({row}) => {
 			return <div className="font-medium">{row.getValue("name")}</div>;
 		}
 	},
 	{
 		accessorKey: "email",
-		header: () => <div>Email</div>,
+		header: ({column}) => <div
+			className="flex"
+			onClick={() => {
+				console.log(column.getIsSorted());
+				return column.toggleSorting(column.getIsSorted() === "asc");
+			}}
+		>
+			<span>email</span>
+			<ArrowIcon column={column}/>
+		</div>,
 		cell: ({row}) => {
 			return <div className="font-medium">{row.getValue("email")}</div>;
 		}

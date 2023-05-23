@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
 import { ErrorMessage } from './ErrorMessage';
 
-export const TextField = forwardRef(
+export const SelectField = forwardRef(
 	(
 		{
 			value,
@@ -11,13 +11,11 @@ export const TextField = forwardRef(
 			name,
 			label,
 			error,
-			renderContainer = (props) => <input {...props} />,
-			onBlur,
 			onChange,
-			className
+			className,
+			options
 		},
-		ref
-	) => {
+		ref) => {
 		return (
 			<>
 				{label !== undefined ? (
@@ -26,23 +24,26 @@ export const TextField = forwardRef(
 						<ErrorMessage error={error} />
 					</label>
 				) : null}
-				{renderContainer({
-					value,
-					id,
-					name,
-					type: 'text',
-					ref,
-					className,
-					onBlur,
-					onChange,
-				})}
+				<select
+					ref={ref}
+					value={value}
+					onChange={onChange}
+					name={name}
+					id={id}
+					className={className}
+				>
+					{options.map(option => (
+						<option disabled={option.default} value={option.value} key={option.value}>{option.key}</option>
+					))}
+				</select>
 			</>
 		);
 	}
 );
 
-TextField.displayName = "TextField";
-TextField.propTypes = {
+
+SelectField.displayName = "SelectField";
+SelectField.propTypes = {
 	id: PropTypes.string,
 	name: PropTypes.string,
 	label: PropTypes.string,
@@ -52,4 +53,5 @@ TextField.propTypes = {
 	onChange: PropTypes.any,
 	value: PropTypes.any,
 	className: PropTypes.any,
+	options: PropTypes.any,
 };

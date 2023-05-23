@@ -1,18 +1,13 @@
 import {
-	// ColumnDef,
-	// ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	// SortingState,
 	useReactTable,
-	// VisibilityState,
 } from "@tanstack/react-table";
 import PropType from "prop-types";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useMemo,useState } from "react";
 
 import { Table, TableBody, TableHeader } from "./Table";
 
@@ -22,11 +17,13 @@ export function DataTable({
 	data,
 	className,
 	tabSelected,
+	initialSort = [],
+	isLoading,
 	tabColumnFilter,
 	tabs,
 	...props
 }) {
-	const [sorting, setSorting] = useState([]);
+	const [sorting, setSorting] = useState(initialSort);
 	const [columnFilters, setColumnFilters] = useState([]);
 	const [columnVisibility, setColumnVisibility] = useState({});
 	const [rowSelection, setRowSelection] = useState({});
@@ -49,6 +46,10 @@ export function DataTable({
 			rowSelection,
 		},
 	});
+
+	const columnTotal = useMemo(() => {
+		return table.getHeaderGroups()[0].headers.length;
+	}, [table]);
 
 	useEffect(() => {
 		if(!tabColumnFilter) {
@@ -94,37 +95,42 @@ export function DataTable({
 						))}
 					</TableHeader>
 					<TableBody>
-						{table.getRowModel().rows.length ? (
-							table.getRowModel().rows.map((row) => (
-								<tr
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-								>
-									{row.getVisibleCells().map((cell) => (
-										<td key={cell.id}>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
-										</td>
-									))}
+						{isLoading ? <tr><td colSpan={columnTotal}>
+							<div className="flex justify-center">
+								<button className="loading btn">loading</button>
+							</div>
+						</td></tr> :
+							table.getRowModel().rows.length ? (
+								table.getRowModel().rows.map((row) => (
+									<tr
+										key={row.id}
+										data-state={row.getIsSelected() && "selected"}
+									>
+										{row.getVisibleCells().map((cell) => (
+											<td key={cell.id}>
+												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											</td>
+										))}
+									</tr>
+								))
+							) : (
+								<tr>
+									<td
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										No results.
+									</td>
 								</tr>
-							))
-						) : (
-							<tr>
-								<td
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</td>
-							</tr>
-						)}
+							)}
 					</TableBody>
 				</Table>
 			</div>
 			<div className="flex items-center justify-end space-x-2 py-4">
-				<div className="flex-1 text-sm">
+				{/* <div className="flex-1 text-sm">
 					{table.getFilteredSelectedRowModel().rows.length} of{" "}
 					{table.getFilteredRowModel().rows.length} row(s) selected.
-				</div>
+				</div> */}
 				<div className="space-x-2">
 					<button
 						className="btn-primary btn-sm btn"
@@ -154,4 +160,6 @@ DataTable.propTypes = {
 	tabs: PropType.element,
 	tabColumnFilter: PropType.string,
 	tabSelected: PropType.string,
+	isLoading: PropType.bool,
+	initialSort: PropType.array,
 };

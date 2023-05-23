@@ -9,7 +9,8 @@ import Modal from './components/Modal/Modal';
 
 function App() {
 	return (
-		<>	<Modal/>
+		<>
+			<Modal/>
 			<RouterProvider router={createBrowserRouter(routesArray)}/>
 		</>
 	);

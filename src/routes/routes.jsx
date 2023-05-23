@@ -16,9 +16,6 @@ export const routesArray = [
 		name: "Employee Management",
 		element: <Suspense fallback={<></>}>
 			<EmployeeManagement />
-		</Suspense>,
-		loader: async () => {
-			return fetch("http://localhost:8081/api/v1/employees");
-		}
+		</Suspense>
 	},
 ];

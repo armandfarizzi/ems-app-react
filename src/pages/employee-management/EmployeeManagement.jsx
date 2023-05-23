@@ -5,7 +5,7 @@ import EmployeeTable from "@/features/employee/EmployeeTable";
 
 function EmployeeManagement() {
 	const { t } = useTranslation();
-	return <div className="page-form h-screen container mx-auto px-5 bg-gray-700 max-w-3xl">
+	return <div className="container mx-auto min-h-screen max-w-3xl bg-gray-700 px-5">
 		<div className="py-3 text-gray-200">
 			{t("page.form.title")}
 		</div>

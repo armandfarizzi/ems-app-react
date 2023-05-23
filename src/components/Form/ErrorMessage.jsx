@@ -7,10 +7,10 @@ export const ErrorMessage = ({ error }) => {
 	if (error === undefined) {
 		return null;
 	} else if (typeof error === 'string') {
-		return <div className="error-text">{error}</div>;
+		return <span className="label-text-alt text-sm text-slate-300">{error}</span>;
 	} else {
 		const { key, values } = error;
-		return <div className="error-text">{t(key, values)}</div>;
+		return <span className="label-text-alt text-sm text-slate-300">{t(key, values)}</span>;
 	}
 };
 
