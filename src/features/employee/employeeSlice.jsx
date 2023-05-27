@@ -1,6 +1,7 @@
 import { createAsyncThunk, current } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { mande } from "mande";
+
+import { getEmployeeList, postSubmitAddEmployee } from "@/utils/api";
 
 import { closeModal } from "../modal/modalSlice";
 import { submitEmployeeSchema } from "./schema";
@@ -25,9 +26,7 @@ const initialState = {
 export const fetchEmployees = createAsyncThunk(
 	'employee/fetchEmployees',
 	async () => {
-		return mande(
-			"http://localhost:8081/api/v1/employees"
-		).get();
+		return await getEmployeeList();
 	}
 );
 
@@ -46,15 +45,7 @@ export const submitAddEmployee = createAsyncThunk(
 				return thunkAPI.rejectWithValue(errBag);
 			}
 		}
-		const response = await mande(
-			"http://localhost:8081/api/v1/employees/bulk").post(
-			body,
-			{
-				headers: {
-					"Content-Type": "application/json"
-				}
-			}
-		);
+		const response = await postSubmitAddEmployee(body);
 
 		// close and refetch the table list
 		thunkAPI.dispatch(closeModal());

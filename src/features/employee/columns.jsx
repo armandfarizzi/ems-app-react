@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp,ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown } from "lucide-react";
 import PropType from "prop-types";
 import { useSelector } from "react-redux";
 
@@ -23,16 +23,19 @@ export const columns = [
 		header: ({column}) =>
 			<div
 				className="flex"
-				onClick={() => {
-					console.log(column.getIsSorted());
-					return column.toggleSorting(column.getIsSorted() === "asc");
-				}}
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				<span>name</span>
 				<ArrowIcon column={column}/>
 			</div>,
 		cell: ({row}) => {
-			return <div className="font-medium">{row.getValue("name")}</div>;
+			return <div {...{
+				onClick: () => {console.log(row);row.toggleExpanded();console.log(row.getCanExpand());console.log("EXPAND!!", row.toggleExpanded());},
+				style: { cursor: 'pointer' },
+				className: "font-medium"
+			}}>
+				<ChevronDown  className="inline"/>{row.getValue("name")}
+			</div>;
 		}
 	},
 	{

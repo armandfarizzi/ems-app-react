@@ -2,6 +2,8 @@ import { current } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addMinutes, formatISO, isAfter, parseISO } from 'date-fns';
 
+import { getDepartment } from "@/utils/api";
+
 const initialState = {
 	populatedAt: false,
 	selectedDepartment: {},
@@ -11,8 +13,7 @@ const initialState = {
 export const forceFetchDepartment = createAsyncThunk(
 	'department/forceFetchDepartment',
 	async () => {
-		const response = await fetch("http://localhost:8081/api/v1/department");
-		return await response.json();
+		return await getDepartment();
 	}
 );
 
@@ -27,9 +28,7 @@ export const fetchDepartment = createAsyncThunk(
 				return state.department.departmentList;
 			}
 		}
-		
-		const response = await fetch("http://localhost:8081/api/v1/department");
-		return await response.json();
+		return await getDepartment();
 	}
 );
 

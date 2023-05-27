@@ -1,6 +1,7 @@
 import {
 	flexRender,
 	getCoreRowModel,
+	getExpandedRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
@@ -27,19 +28,24 @@ export function DataTable({
 	const [columnFilters, setColumnFilters] = useState([]);
 	const [columnVisibility, setColumnVisibility] = useState({});
 	const [rowSelection, setRowSelection] = useState({});
+	const [expanded, setExpanded] = useState({});
 
 	const table = useReactTable({
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
+		onExpandedChange: setExpanded,
+		getSubRows: row => row.subRows,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
+		getExpandedRowModel: getExpandedRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
 		onRowSelectionChange: setRowSelection,
 		data,
 		columns,
 		state: {
+			expanded,
 			sorting,
 			columnFilters,
 			columnVisibility,
@@ -102,16 +108,23 @@ export function DataTable({
 						</td></tr> :
 							table.getRowModel().rows.length ? (
 								table.getRowModel().rows.map((row) => (
-									<tr
-										key={row.id}
-										data-state={row.getIsSelected() && "selected"}
-									>
-										{row.getVisibleCells().map((cell) => (
-											<td key={cell.id}>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									<>
+										<tr
+											key={row.id}
+											data-state={row.getIsSelected() && "selected"}
+										>
+											{row.getVisibleCells().map((cell) => (
+												<td key={cell.id}>
+													{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												</td>
+											))}
+										</tr>
+										{row.isExpanded && <tr>
+											<td>
+												<div>content</div>
 											</td>
-										))}
-									</tr>
+										</tr>}
+									</>
 								))
 							) : (
 								<tr>
