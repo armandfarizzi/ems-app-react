@@ -1,8 +1,11 @@
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import PropType from "prop-types";
 import { useSelector } from "react-redux";
 
 import { getDepartmentById } from "@/features/department/departmentSlice";
+
+import EmployeeExpandCell from "./EmployeeExpandCell";
 
 function ArrowIcon({column}) {
 	return (
@@ -17,7 +20,15 @@ ArrowIcon.propTypes = {
 	column: PropType.any,
 };
 
+/**
+ * @typedef {import('@tanstack/react-table').ColumnDef[]}
+ */
 export const columns = [
+	{
+		accessorKey: "id",
+		cell: null,
+		header: null,
+	},
 	{
 		accessorKey: "name",
 		header: ({column}) =>
@@ -28,13 +39,17 @@ export const columns = [
 				<span>name</span>
 				<ArrowIcon column={column}/>
 			</div>,
+		expandCell: EmployeeExpandCell,
 		cell: ({row}) => {
 			return <div {...{
-				onClick: () => {console.log(row);row.toggleExpanded();console.log(row.getCanExpand());console.log("EXPAND!!", row.toggleExpanded());},
+				onClick: () => {row.toggleExpanded();},
 				style: { cursor: 'pointer' },
 				className: "font-medium"
 			}}>
-				<ChevronDown  className="inline"/>{row.getValue("name")}
+				{row.getIsExpanded() ?
+					<ChevronUp  className="inline"/> :
+					<ChevronDown  className="inline"/>}
+				{row.getValue("name")}
 			</div>;
 		}
 	},

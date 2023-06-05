@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { DataTable } from "@/components/Table/DataTable";
-import { getSelectedDepartmentId } from "@/features/department/departmentSlice";
+import { getDepartmentLoading, getSelectedDepartmentId } from "@/features/department/departmentSlice";
 import { openModal } from "@/features/modal/modalSlice";
 import { EMPLOYEE_ADD_MODAL } from "@/features/modal/modalType";
 
@@ -14,6 +14,7 @@ function EmployeeTable() {
 	const dispatch = useDispatch();
 	const filterDepartmentId = useSelector(getSelectedDepartmentId);
 	const isLoading = useSelector(getIsLoadingEmployee);
+	const isDepartmentLoading = useSelector(getDepartmentLoading);
 	const data = useSelector(getEmployeesListing);
 	
 	useEffect(() => {
@@ -33,7 +34,7 @@ function EmployeeTable() {
 				initialSort={[{id:"name", desc:false}]}
 				className="table-zebra"
 				columns={columns}
-				isLoading={isLoading}
+				isLoading={isLoading || isDepartmentLoading}
 				data={data}
 				tabs={<EmployeeTableTabs/>}
 				tabColumnFilter={"department_id"}

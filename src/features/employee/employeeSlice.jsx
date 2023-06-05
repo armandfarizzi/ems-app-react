@@ -1,7 +1,7 @@
 import { createAsyncThunk, current } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getEmployeeList, postSubmitAddEmployee } from "@/utils/api";
+import { getEmployeeList, getEmployeeReviews, postSubmitAddEmployee } from "@/utils/api";
 
 import { closeModal } from "../modal/modalSlice";
 import { submitEmployeeSchema } from "./schema";
@@ -18,10 +18,32 @@ const initialState = {
 		}
 	],
 	emloyeeList: [],
-	errorBag: {
+	errorBag: { },
+	employeeReviewLoading: {
+
+	},
+	employeeReview: {
 
 	}
 };
+
+export const fetchEmployeeReview = createAsyncThunk(
+	'employee/fetchEmployeeReview',
+	async (employeeId, thunkAPI) => {
+		thunkAPI.dispatch(resetEmployeeReviewById(employeeId));
+		return await getEmployeeReviews(employeeId);
+	}
+);
+
+function addBuilderForFetchEmployeeReview(builder) {
+	builder.addCase(fetchEmployeeReview.pending, (state, action) => {
+		state.employeeReviewLoading[action.meta.arg] = true;
+	});
+	builder.addCase(fetchEmployeeReview.fulfilled, (state, action) => {
+		state.employeeReview[action.meta.arg] = action.payload;
+		state.employeeReviewLoading[action.meta.arg] = false;
+	});
+}
 
 export const fetchEmployees = createAsyncThunk(
 	'employee/fetchEmployees',
@@ -80,7 +102,10 @@ export const employeeForm = createSlice({
 
 			// delete the errorbag if user input the respective fields
 			delete state.errorBag[`[${payload.index}].${payload.field}`];
-		}
+		},
+		resetEmployeeReviewById: (state, action) => {
+			state.employeeReview[action.payload] = {};
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchEmployees.pending, (state) => {
@@ -93,14 +118,22 @@ export const employeeForm = createSlice({
 			state.emloyeeList = action.payload;
 			state.isLoading = false;
 		});
+
+		addBuilderForFetchEmployeeReview(builder);
 	}
 });
 
+export const getEmployeeReviewLoadingById = (employeeId) => {
+	return (state) => state.employee.employeeReviewLoading[employeeId];
+};
+export const getEmployeeReviewById = (employeeId) => {
+	return (state) => state.employee.employeeReview[employeeId];
+};
 export const getErrorBag = state => state.employee.errorBag;
 export const getIsLoadingEmployee = state => state.employee.isLoading;
 export const getEmployeesListing = state => state.employee.emloyeeList;
 export const getEmployeeForm = state => state.employee.addEmployeeForm;
 export const getCurrentIndex = state => state.employee.currentIndex;
 export const getValueByIndex = state => state.employee.addEmployeeForm[state.employee.currentIndex];
-export const { setAddEmployeeForm, resetEmployeeState, addEmployeeIndex, changeIndex } = employeeForm.actions;
+export const { setAddEmployeeForm, resetEmployeeState, addEmployeeIndex, changeIndex, resetEmployeeReviewById } = employeeForm.actions;
 export default employeeForm.reducer;

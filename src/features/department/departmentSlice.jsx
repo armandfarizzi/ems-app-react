@@ -5,6 +5,7 @@ import { addMinutes, formatISO, isAfter, parseISO } from 'date-fns';
 import { getDepartment } from "@/utils/api";
 
 const initialState = {
+	isLoading: false,
 	populatedAt: false,
 	selectedDepartment: {},
 	departmentList: []
@@ -47,9 +48,13 @@ export const departmentList = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
+		builder.addCase(fetchDepartment.pending, (state) => {
+			state.isLoading = true;
+		});
 		builder.addCase(fetchDepartment.fulfilled, (state, action) => {
 			state.populatedAt = formatISO(new Date());
 			state.departmentList = action.payload;
+			state.isLoading = false;
 		});
 		builder.addCase(forceFetchDepartment.fulfilled, (state, action) => {
 			state.populatedAt = formatISO(new Date());
@@ -58,6 +63,7 @@ export const departmentList = createSlice({
 	}
 });
 
+export const getDepartmentLoading = state => state.department.isLoading;
 export const getDepartmentById = (id) => {
 	return (state) => {
 		return state.department.departmentList.find(dep => dep.id == id);

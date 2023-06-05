@@ -16,6 +16,13 @@ export const routesArray = [
 		name: "Employee Management",
 		element: <Suspense fallback={<></>}>
 			<EmployeeManagement />
-		</Suspense>
+		</Suspense>,
+		children: [
+			{
+				path: ":employee_id",
+				name: "Employee Detail",
+				element: <div>hello!</div>
+			}
+		]
 	},
 ];

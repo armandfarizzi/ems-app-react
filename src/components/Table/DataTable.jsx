@@ -86,6 +86,9 @@ export function DataTable({
 						{table.getHeaderGroups().map((headerGroup) => (
 							<tr key={headerGroup.id}>
 								{headerGroup.headers.map((header) => {
+									if (!header.column.columnDef.header) {
+										return <></>;
+									}
 									return (
 										<th key={header.id}>
 											{header.isPlaceholder
@@ -113,17 +116,23 @@ export function DataTable({
 											key={row.id}
 											data-state={row.getIsSelected() && "selected"}
 										>
-											{row.getVisibleCells().map((cell) => (
-												<td key={cell.id}>
-													{flexRender(cell.column.columnDef.cell, cell.getContext())}
-												</td>
-											))}
+											{row.getVisibleCells().map((cell) => {
+												if (!cell.column.columnDef.cell) {
+													return <></>;
+												}
+												return (
+													<td key={cell.id}>
+														{flexRender(cell.column.columnDef.cell, cell.getContext())}
+													</td>
+												);})}
 										</tr>
-										{row.isExpanded && <tr>
-											<td>
-												<div>content</div>
-											</td>
-										</tr>}
+										{
+											row.getIsExpanded() &&
+											row.getVisibleCells().map((cell) => {
+												if (cell.column.columnDef.expandCell) {
+													return flexRender(cell.column.columnDef.expandCell, cell.getContext());}
+											})
+										}
 									</>
 								))
 							) : (

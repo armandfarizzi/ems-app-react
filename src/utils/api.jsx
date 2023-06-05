@@ -13,6 +13,10 @@ export const getEmployeeList = () => {
 	return mande(`${API_HOST}/employees`).get();
 };
 
+export const getEmployeeReviews = (employeeId) => {
+	return mande(`${API_HOST}/reviews`).get({query: {"employee_id": employeeId}});
+};
+
 export const getDepartment = () => {
 	return mande(`${API_HOST}/department`).get();
 };
